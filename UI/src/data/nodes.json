@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "type": "custom",
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "data": {
+      "fieldNode": "Start Node",
+      "instructions": "Enter instructions here",
+      "responseFields": [
+        {
+          "key": "name",
+          "value": "John"
+        }
+      ]
+    }
+  },
+  {
+    "id": "2",
+    "type": "custom",
+    "position": {
+      "x": 400,
+      "y": 100
+    },
+    "data": {
+      "fieldNode": "LLM Node",
+      "instructions": "LLM instructions",
+      "responseFields": [
+        {
+          "key": "answer",
+          "value": "Sample response"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,103 @@
+{
+  "name": "new_test_flow",
+  "savedAt": "2026-05-11T08:24:56.723691",
+  "nodes": [
+    {
+      "id": "node_1",
+      "type": "workflow",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {
+        "fieldNode": "random_node_1",
+        "instructions": "This is the first random node. Provide any input you want.",
+        "responseFields": [
+          {
+            "key": "input_1",
+            "value": "example input 1"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 0,
+        "y": 0
+      },
+      "dragging": false,
+      "children": [
+        "node_3"
+      ]
+    },
+    {
+      "id": "node_2",
+      "type": "workflow",
+      "position": {
+        "x": 0,
+        "y": 370
+      },
+      "data": {
+        "fieldNode": "random_node_2",
+        "instructions": "This is the second random node. Enter your response.",
+        "responseFields": [
+          {
+            "key": "input_2",
+            "value": "example input 2"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 0,
+        "y": 370
+      },
+      "dragging": false,
+      "children": [
+        "node_3"
+      ]
+    },
+    {
+      "id": "node_3",
+      "type": "workflow",
+      "position": {
+        "x": 420,
+        "y": 185
+      },
+      "data": {
+        "fieldNode": "summary_node",
+        "instructions": "Summary of inputs from previous nodes.",
+        "responseFields": [
+          {
+            "key": "summary",
+            "value": "Summary of all inputs collected."
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 420,
+        "y": 185
+      },
+      "dragging": false,
+      "children": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-3",
+      "source": "node_1",
+      "target": "node_3"
+    },
+    {
+      "id": "e2-3",
+      "source": "node_2",
+      "target": "node_3"
+    }
+  ]
+}

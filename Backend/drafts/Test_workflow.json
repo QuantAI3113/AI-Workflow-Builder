@@ -1,0 +1,177 @@
+{
+  "name": "Test_workflow",
+  "savedAt": "2026-05-11T06:51:22.841044",
+  "nodes": [
+    {
+      "id": "node_0",
+      "type": "workflow",
+      "position": {
+        "x": 0,
+        "y": 370
+      },
+      "data": {
+        "fieldNode": "random_node_0",
+        "instructions": "This is node 0 with random data.",
+        "responseFields": [
+          {
+            "key": "example_key_0",
+            "value": "example_value_0"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 0,
+        "y": 370
+      },
+      "dragging": false,
+      "children": [
+        "node_1",
+        "node_2"
+      ]
+    },
+    {
+      "id": "node_1",
+      "type": "workflow",
+      "position": {
+        "x": 420,
+        "y": 0
+      },
+      "data": {
+        "fieldNode": "random_node_1",
+        "instructions": "This is node 1 with random data.",
+        "responseFields": [
+          {
+            "key": "example_key_1",
+            "value": "example_value_1"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 420,
+        "y": 0
+      },
+      "dragging": false,
+      "children": [
+        "node_4"
+      ]
+    },
+    {
+      "id": "node_2",
+      "type": "workflow",
+      "position": {
+        "x": 420,
+        "y": 740
+      },
+      "data": {
+        "fieldNode": "random_node_2",
+        "instructions": "This is node 2 with random data.",
+        "responseFields": [
+          {
+            "key": "example_key_2",
+            "value": "example_value_2"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 420,
+        "y": 740
+      },
+      "dragging": false,
+      "children": [
+        "node_3"
+      ]
+    },
+    {
+      "id": "node_3",
+      "type": "workflow",
+      "position": {
+        "x": 840,
+        "y": 740
+      },
+      "data": {
+        "fieldNode": "random_node_3",
+        "instructions": "This is node 3 with random data.",
+        "responseFields": [
+          {
+            "key": "example_key_3",
+            "value": "example_value_3"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 840,
+        "y": 740
+      },
+      "dragging": false,
+      "children": [
+        "node_4"
+      ]
+    },
+    {
+      "id": "node_4",
+      "type": "workflow",
+      "position": {
+        "x": 1260,
+        "y": 370
+      },
+      "data": {
+        "fieldNode": "random_node_4",
+        "instructions": "Summary node for all paths.",
+        "responseFields": [
+          {
+            "key": "summary_key",
+            "value": "summary_value"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1260,
+        "y": 370
+      },
+      "dragging": false,
+      "children": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0-1",
+      "source": "node_0",
+      "target": "node_1"
+    },
+    {
+      "id": "e0-2",
+      "source": "node_0",
+      "target": "node_2"
+    },
+    {
+      "id": "e2-3",
+      "source": "node_2",
+      "target": "node_3"
+    },
+    {
+      "id": "e1-4",
+      "source": "node_1",
+      "target": "node_4"
+    },
+    {
+      "id": "e3-4",
+      "source": "node_3",
+      "target": "node_4"
+    }
+  ]
+}

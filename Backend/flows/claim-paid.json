@@ -1,0 +1,335 @@
+{
+  "name": "claim-paid",
+  "publishedAt": "2026-05-11T13:27:49.702547",
+  "nodes": [
+    {
+      "id": "1",
+      "type": "workflow",
+      "position": {
+        "x": 100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "introduction",
+        "instructions": "Introduce the insurance company representative and greet the customer politely.",
+        "responseFields": []
+      },
+      "width": 300,
+      "height": 312
+    },
+    {
+      "id": "2",
+      "type": "workflow",
+      "position": {
+        "x": 600,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "verify_identity",
+        "instructions": "Confirm the customer\u2019s identity using policy number, registered mobile number, or date of birth.",
+        "responseFields": [
+          {
+            "key": "customer_confirmation",
+            "value": "Customer confirmation of identity"
+          },
+          {
+            "key": "verification_status",
+            "value": "Status of the identity verification"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347
+    },
+    {
+      "id": "2a",
+      "type": "workflow",
+      "position": {
+        "x": 1100,
+        "y": -400
+      },
+      "data": {
+        "fieldNode": "time_constraint_check",
+        "instructions": "Check if the customer says they don't have time to continue the call.",
+        "responseFields": [
+          {
+            "key": "time_constraint",
+            "value": "Customer indicates if they don't have time"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "2b",
+      "type": "workflow",
+      "position": {
+        "x": 1100,
+        "y": 40
+      },
+      "data": {
+        "fieldNode": "continue_existing_flow",
+        "instructions": "Continue with the existing flow if the customer has time.",
+        "responseFields": []
+      },
+      "width": 302,
+      "height": 312
+    },
+    {
+      "id": "2c",
+      "type": "workflow",
+      "position": {
+        "x": 1600,
+        "y": -400
+      },
+      "data": {
+        "fieldNode": "call_later_offer",
+        "instructions": "Inform the customer that a call will be made later as per their convenience.",
+        "responseFields": []
+      },
+      "width": 302,
+      "height": 312
+    },
+    {
+      "id": "3",
+      "type": "workflow",
+      "position": {
+        "x": 1600,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "confirm_claim",
+        "instructions": "Ask whether the customer is calling regarding an existing insurance claim.",
+        "responseFields": [
+          {
+            "key": "yes_no",
+            "value": "Customer response yes or no"
+          },
+          {
+            "key": "claim_reference_number",
+            "value": "Claim reference number provided by customer"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347
+    },
+    {
+      "id": "4",
+      "type": "workflow",
+      "position": {
+        "x": 2100,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "fetch_claim_status",
+        "instructions": "Retrieve the latest claim details from the backend system.",
+        "responseFields": [
+          {
+            "key": "claim_status",
+            "value": "Current status of the claim"
+          },
+          {
+            "key": "claim_stage",
+            "value": "Current stage of the claim process"
+          },
+          {
+            "key": "last_updated_date",
+            "value": "Date when the claim was last updated"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 385
+    },
+    {
+      "id": "5",
+      "type": "workflow",
+      "position": {
+        "x": 2600,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "inform_status",
+        "instructions": "Explain the current claim status clearly to the customer, such as under review, approved, rejected, or awaiting documents.",
+        "responseFields": []
+      },
+      "width": 300,
+      "height": 312
+    },
+    {
+      "id": "6",
+      "type": "workflow",
+      "position": {
+        "x": 3100,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "document_check",
+        "instructions": "Ask whether the customer has submitted all required documents.",
+        "responseFields": [
+          {
+            "key": "yes_no",
+            "value": "Customer response yes or no about documents"
+          },
+          {
+            "key": "missing_document_names",
+            "value": "Names of any missing documents"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347
+    },
+    {
+      "id": "7",
+      "type": "workflow",
+      "position": {
+        "x": 3600,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "pending_action",
+        "instructions": "Guide the customer on any pending actions needed to continue claim processing.",
+        "responseFields": [
+          {
+            "key": "action_acknowledgement",
+            "value": "Customer acknowledgement of pending actions"
+          },
+          {
+            "key": "expected_submission_timeline",
+            "value": "Timeline for expected document submission"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347
+    },
+    {
+      "id": "8",
+      "type": "workflow",
+      "position": {
+        "x": 4100,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "escalation_offer",
+        "instructions": "Ask if the customer wants the issue escalated to a claims officer or support team.",
+        "responseFields": [
+          {
+            "key": "escalation_required_yes_no",
+            "value": "Whether escalation is required"
+          },
+          {
+            "key": "escalation_reason",
+            "value": "Reason for escalation if any"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347
+    },
+    {
+      "id": "9",
+      "type": "workflow",
+      "position": {
+        "x": 4600,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "callback_confirmation",
+        "instructions": "Confirm whether the customer would like a callback update once the claim progresses further.",
+        "responseFields": [
+          {
+            "key": "preferred_callback_time",
+            "value": "Customer's preferred time for callback"
+          },
+          {
+            "key": "confirmation_status",
+            "value": "Customer confirmation for callback"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347
+    },
+    {
+      "id": "10",
+      "type": "workflow",
+      "position": {
+        "x": 5100,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "closing",
+        "instructions": "Thank the customer for their time, provide reassurance that the claim is being handled, and end the call professionally.",
+        "responseFields": []
+      },
+      "width": 302,
+      "height": 312
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-2",
+      "source": "1",
+      "target": "2"
+    },
+    {
+      "id": "e2-2a",
+      "source": "2",
+      "target": "2a"
+    },
+    {
+      "id": "e2-2b",
+      "source": "2",
+      "target": "2b"
+    },
+    {
+      "id": "e2a-2c",
+      "source": "2a",
+      "target": "2c"
+    },
+    {
+      "id": "e2b-3",
+      "source": "2b",
+      "target": "3"
+    },
+    {
+      "id": "e3-4",
+      "source": "3",
+      "target": "4"
+    },
+    {
+      "id": "e4-5",
+      "source": "4",
+      "target": "5"
+    },
+    {
+      "id": "e5-6",
+      "source": "5",
+      "target": "6"
+    },
+    {
+      "id": "e6-7",
+      "source": "6",
+      "target": "7"
+    },
+    {
+      "id": "e7-8",
+      "source": "7",
+      "target": "8"
+    },
+    {
+      "id": "e8-9",
+      "source": "8",
+      "target": "9"
+    },
+    {
+      "id": "e9-10",
+      "source": "9",
+      "target": "10"
+    }
+  ]
+}

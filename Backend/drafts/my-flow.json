@@ -1,0 +1,25 @@
+{
+  "name": "my-flow",
+  "savedAt": "2026-05-10T16:56:25.340260",
+  "nodes": [
+    {
+      "id": "1778432185330",
+      "type": "workflow",
+      "position": {
+        "x": 48.26995893933817,
+        "y": 53.801340844400805
+      },
+      "data": {
+        "fieldNode": "",
+        "instructions": "",
+        "responseFields": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      }
+    }
+  ],
+  "edges": []
+}

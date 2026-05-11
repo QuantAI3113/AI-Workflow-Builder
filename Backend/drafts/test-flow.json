@@ -1,0 +1,25 @@
+{
+  "name": "test-flow",
+  "savedAt": "2026-05-11T05:18:12.228606",
+  "nodes": [
+    {
+      "id": "1778476691784",
+      "type": "workflow",
+      "position": {
+        "x": 463.43790917767416,
+        "y": 311.5627662644285
+      },
+      "data": {
+        "fieldNode": "",
+        "instructions": "",
+        "responseFields": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      }
+    }
+  ],
+  "edges": []
+}
