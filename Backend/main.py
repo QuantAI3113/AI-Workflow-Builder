@@ -49,6 +49,8 @@ DRAFTS_DIR = os.path.join(
 os.makedirs(FLOWS_DIR, exist_ok=True)
 os.makedirs(DRAFTS_DIR, exist_ok=True)
 
+PORT = 5000
+
 # -----------------------------------
 # MODELS
 # -----------------------------------
@@ -466,6 +468,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=5000,
+        port=PORT,
         reload=True
     )
