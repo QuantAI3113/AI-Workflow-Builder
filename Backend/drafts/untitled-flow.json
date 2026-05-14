@@ -1,6 +1,63 @@
 {
   "name": "untitled-flow",
-  "savedAt": "2026-05-11T10:37:38.360047",
-  "nodes": [],
-  "edges": []
+  "savedAt": "2026-05-14T05:06:53.031851",
+  "nodes": [
+    {
+      "id": "1778735187009",
+      "type": "workflow",
+      "position": {
+        "x": 465.9512456787531,
+        "y": 117.33073006713077
+      },
+      "data": {
+        "fieldNode": "node 1",
+        "instructions": " - node 1",
+        "responseFields": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "1778735197981",
+      "type": "workflow",
+      "position": {
+        "x": 952.4357360564711,
+        "y": 119.85554457049915
+      },
+      "data": {
+        "fieldNode": "node 2",
+        "instructions": "- node 2",
+        "responseFields": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": true,
+      "positionAbsolute": {
+        "x": 952.4357360564711,
+        "y": 119.85554457049915
+      },
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "1778735187009",
+      "sourceHandle": null,
+      "target": "1778735197981",
+      "targetHandle": null,
+      "id": "reactflow__edge-1778735187009-1778735197981"
+    }
+  ]
 }

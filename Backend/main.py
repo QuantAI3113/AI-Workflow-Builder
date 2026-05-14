@@ -26,7 +26,7 @@ app.add_middleware(
 # CONFIG
 # -----------------------------------
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_API_KEY = "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"
 
 # -----------------------------------
 # DIRECTORIES
@@ -72,11 +72,11 @@ async def call_openai(messages: list[dict]) -> str:
         response = await client.post(
             "https://api.openai.com/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {OPENAI_API_KEY}",
+                "Authorization": f"Bearer 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",
                 "Content-Type": "application/json",
             },
             json={
-                "model": "gpt-4.1-mini",
+                "model": "gpt-4o",
                 "messages": messages,
                 "temperature": 0.7,
             },
@@ -403,57 +403,63 @@ async def root():
 
 @app.get("/session")
 async def get_session(workflowName: str):
+    try:
 
-    file_name = workflowName.strip()[:-5]
+        file_name = workflowName.strip()[:-5]
 
-    flow_path = f"./flows/{file_name}.json"
+        flow_path = f"./flows/{file_name}.json"
 
-    instructions = "Start with the workflow below"
+        instructions = "Start with the workflow below. Never ask how can I assist you"
 
-    # Check if workflow file exists
-    if os.path.exists(flow_path):
-        try:
-            with open(flow_path, "r") as f:
-                workflow_json = json.load(f)
+        # Check if workflow file exists
+        if os.path.exists(flow_path):
+            try:
+                with open(flow_path, "r") as f:
+                    workflow_json = json.load(f)
 
-            instructions += f"""
+                instructions += f"""
 
-                Follow this workflow strictly during the conversation.
+                    Follow this workflow strictly during the conversation.
 
-                Workflow JSON:
-                {json.dumps(workflow_json, indent=2)}
+                    Workflow JSON:
+                    {json.dumps(workflow_json, indent=2)}
 
-            """
+                """
 
-        except Exception as e:
+            except Exception as e:
+                return {
+                    "success": False,
+                    "message": f"Failed to read workflow file: {str(e)}"
+                }
+
+        else:
             return {
                 "success": False,
-                "message": f"Failed to read workflow file: {str(e)}"
+                "message": "Workflow file not found"
             }
 
-    else:
-        return {
-            "success": False,
-            "message": "Workflow file not found"
-        }
-    
-    print("instructions ", instructions)
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(
+                    "https://api.openai.com/v1/realtime/sessions",
+                    headers={
+                        "Authorization": f"Bearer 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",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": "gpt-realtime",
+                        "voice": "shimmer",
+                        "instructions": instructions,
+                    }
+                )                
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://api.openai.com/v1/realtime/sessions",
-            headers={
-                "Authorization": f"Bearer {OPENAI_API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "gpt-4o-mini-realtime-preview-2024-12-17",
-                "voice": "alloy",
-                "instructions": instructions,
-            }
-        )
+                return response.json()
+            
+            except Exception as e:
+                print("Error occured in gpt", str(e))
 
-        return response.json()
+    except Exception as e:
+        print("Error occured in /session", str(e))
 
 if __name__ == "__main__":
 

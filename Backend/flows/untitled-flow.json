@@ -1,0 +1,246 @@
+{
+  "name": "untitled-flow",
+  "generatedAt": "2026-05-14T05:08:07.676045",
+  "sourcePrompt": "Create a 10 node workflow where, I need a travel enquiry workflow, fill the packages and price information yourself as a test workflow. Don't include any validation steps.",
+  "nodes": [
+    {
+      "id": "1",
+      "type": "workflow",
+      "position": {
+        "x": 100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "start_enquiry",
+        "instructions": "Initialize the travel enquiry process.",
+        "responseFields": [
+          {
+            "key": "enquiry_id",
+            "value": "Unique identifier for the enquiry"
+          }
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "type": "workflow",
+      "position": {
+        "x": 580,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "collect_user_info",
+        "instructions": "Gather user's travel preferences and contact details.",
+        "responseFields": [
+          {
+            "key": "user_name",
+            "value": "Name of the user"
+          },
+          {
+            "key": "contact_info",
+            "value": "User's contact information"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "type": "workflow",
+      "position": {
+        "x": 1060,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "select_destination",
+        "instructions": "Allow user to select a travel destination.",
+        "responseFields": [
+          {
+            "key": "destination",
+            "value": "Chosen travel destination"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "type": "workflow",
+      "position": {
+        "x": 1540,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "choose_travel_dates",
+        "instructions": "Gather preferred travel dates from user.",
+        "responseFields": [
+          {
+            "key": "start_date",
+            "value": "Start date of travel"
+          },
+          {
+            "key": "end_date",
+            "value": "End date of travel"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "type": "workflow",
+      "position": {
+        "x": 2020,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "select_package",
+        "instructions": "Allow user to select a travel package.",
+        "responseFields": [
+          {
+            "key": "package_id",
+            "value": "Identifier of the selected package"
+          },
+          {
+            "key": "package_details",
+            "value": "Details of the selected package"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6",
+      "type": "workflow",
+      "position": {
+        "x": 2500,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "calculate_price",
+        "instructions": "Calculate the total price based on selected package and dates.",
+        "responseFields": [
+          {
+            "key": "total_price",
+            "value": "Calculated total price"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7",
+      "type": "workflow",
+      "position": {
+        "x": 2980,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "send_confirmation",
+        "instructions": "Send a confirmation message to the user.",
+        "responseFields": [
+          {
+            "key": "confirmation_status",
+            "value": "Status of confirmation sent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8",
+      "type": "workflow",
+      "position": {
+        "x": 3460,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "generate_itinerary",
+        "instructions": "Create a travel itinerary based on user selections.",
+        "responseFields": [
+          {
+            "key": "itinerary_details",
+            "value": "Detailed travel itinerary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9",
+      "type": "workflow",
+      "position": {
+        "x": 3940,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "feedback_request",
+        "instructions": "Request feedback from user post-travel.",
+        "responseFields": [
+          {
+            "key": "feedback",
+            "value": "User's feedback"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "type": "workflow",
+      "position": {
+        "x": 4420,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "end_enquiry",
+        "instructions": "Finalize and close the travel enquiry.",
+        "responseFields": [
+          {
+            "key": "closure_status",
+            "value": "Final status of the enquiry"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-2",
+      "source": "1",
+      "target": "2"
+    },
+    {
+      "id": "e2-3",
+      "source": "2",
+      "target": "3"
+    },
+    {
+      "id": "e3-4",
+      "source": "3",
+      "target": "4"
+    },
+    {
+      "id": "e4-5",
+      "source": "4",
+      "target": "5"
+    },
+    {
+      "id": "e5-6",
+      "source": "5",
+      "target": "6"
+    },
+    {
+      "id": "e6-7",
+      "source": "6",
+      "target": "7"
+    },
+    {
+      "id": "e7-8",
+      "source": "7",
+      "target": "8"
+    },
+    {
+      "id": "e8-9",
+      "source": "8",
+      "target": "9"
+    },
+    {
+      "id": "e9-10",
+      "source": "9",
+      "target": "10"
+    }
+  ]
+}

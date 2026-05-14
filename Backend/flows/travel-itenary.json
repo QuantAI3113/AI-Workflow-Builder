@@ -1,0 +1,262 @@
+{
+  "name": "travel-itenary",
+  "generatedAt": "2026-05-14T04:56:18.932486",
+  "sourcePrompt": "Change the 3rd node specify_dates to 25th June 2026 as the travel date",
+  "nodes": [
+    {
+      "id": "1",
+      "type": "workflow",
+      "position": {
+        "x": 100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "start_conversation",
+        "instructions": "Introduce yourself as Kaviya and you are looking for travel packages.",
+        "responseFields": [
+          {
+            "key": "greeting",
+            "value": "Customer greeting message"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309,
+      "selected": true,
+      "dragging": false
+    },
+    {
+      "id": "2",
+      "type": "workflow",
+      "position": {
+        "x": 380,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "mention_locations",
+        "instructions": "I wanted to travel from New York to Dubai",
+        "responseFields": [
+          {
+            "key": "source_location",
+            "value": "Source location specified"
+          },
+          {
+            "key": "destination_location",
+            "value": "Destination location specified"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 347,
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "3",
+      "type": "workflow",
+      "position": {
+        "x": 660,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "specify_dates",
+        "instructions": "Specify the travel date as 25th June 2026.",
+        "responseFields": [
+          {
+            "key": "travel_dates",
+            "value": "Travel date specified as 25th June 2026"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "4",
+      "type": "workflow",
+      "position": {
+        "x": 940,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_packages",
+        "instructions": "Ask about available travel packages or itinerary options.",
+        "responseFields": [
+          {
+            "key": "package_options",
+            "value": "Available travel packages"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "5",
+      "type": "workflow",
+      "position": {
+        "x": 1220,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "enquire_inclusions",
+        "instructions": "Enquire whether flights, hotels, meals, and local transport are included.",
+        "responseFields": [
+          {
+            "key": "inclusions",
+            "value": "Included services in package"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "6",
+      "type": "workflow",
+      "position": {
+        "x": 1500,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_hotel_category",
+        "instructions": "Ask for hotel category details such as budget, 3-star, 4-star, or luxury options.",
+        "responseFields": [
+          {
+            "key": "hotel_category",
+            "value": "Hotel category options"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "7",
+      "type": "workflow",
+      "position": {
+        "x": 1780,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "request_pricing",
+        "instructions": "Request complete pricing information including taxes and hidden charges.",
+        "responseFields": [
+          {
+            "key": "pricing_details",
+            "value": "Complete pricing information"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "8",
+      "type": "workflow",
+      "position": {
+        "x": 2060,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_visa_requirements",
+        "instructions": "Ask about visa requirements, passport validity, and travel documents needed.",
+        "responseFields": [
+          {
+            "key": "visa_info",
+            "value": "Visa and document requirements"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "9",
+      "type": "workflow",
+      "position": {
+        "x": 2340,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "enquire_cancellation_policy",
+        "instructions": "Enquire about cancellation policy, refund process, and available discounts or offers.",
+        "responseFields": [
+          {
+            "key": "cancellation_policy",
+            "value": "Cancellation policy details"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "10",
+      "type": "workflow",
+      "position": {
+        "x": 2620,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_booking_procedure",
+        "instructions": "Ask for the booking procedure, payment methods, and contact details for further communication.",
+        "responseFields": [
+          {
+            "key": "booking_procedure",
+            "value": "Booking and payment information"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-2",
+      "source": "1",
+      "target": "2"
+    },
+    {
+      "id": "e2-3",
+      "source": "2",
+      "target": "3"
+    },
+    {
+      "id": "e3-4",
+      "source": "3",
+      "target": "4"
+    },
+    {
+      "id": "e4-5",
+      "source": "4",
+      "target": "5"
+    },
+    {
+      "id": "e5-6",
+      "source": "5",
+      "target": "6"
+    },
+    {
+      "id": "e6-7",
+      "source": "6",
+      "target": "7"
+    },
+    {
+      "id": "e7-8",
+      "source": "7",
+      "target": "8"
+    },
+    {
+      "id": "e8-9",
+      "source": "8",
+      "target": "9"
+    },
+    {
+      "id": "e9-10",
+      "source": "9",
+      "target": "10"
+    }
+  ]
+}

@@ -21,7 +21,7 @@ import WorkflowNode from './components/WorkflowNode'
 const API_BASE = 'http://localhost:5000'
 const VOICE_SESSION_URL = 'http://localhost:5000/session'
 const VOICE_BACKEND_BASE = 'http://localhost:5000'
-const OPENAI_REALTIME_MODEL = 'gpt-4o-mini-realtime-preview-2024-12-17'
+const OPENAI_REALTIME_MODEL = 'gpt-realtime'
 
 const nodeTypes = {
   workflow: WorkflowNode,
@@ -788,6 +788,75 @@ const GLOBAL_STYLES = `
     font-family: var(--font-mono);
     margin-top: 10px;
   }
+/* ── Voice shell minimized / expanded ── */
+  .voice-shell-minimized {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 997;
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    background: rgba(17, 19, 32, 0.95);
+    border: 1px solid rgba(99,102,241,0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(99,102,241,0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  }
+  .voice-shell-minimized:hover {
+    transform: scale(1.08);
+    border-color: rgba(99,102,241,0.55);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 20px rgba(99,102,241,0.2);
+  }
+  .voice-shell-minimized .mini-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    object-fit: cover;
+  }
+  .voice-shell-minimized .wave-mini {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(99,102,241,0.15);
+    opacity: 0;
+    animation: waveAnimation 2s infinite ease-out;
+  }
+  .voice-shell-minimized .wave-mini:nth-child(2) { animation-delay: 0.6s; }
+
+  .voice-shell-expanded {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 997;
+    width: 340px;
+    border-radius: 22px;
+    background: rgba(17, 19, 32, 0.9);
+    border: 1px solid rgba(99,102,241,0.16);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
+    padding: 16px;
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    animation: expandIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
+    transform-origin: top right;
+  }
+
+  @keyframes expandIn {
+    from { transform: scale(0.6); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  @keyframes collapseOut {
+    from { transform: scale(1);   opacity: 1; }
+    to   { transform: scale(0.6); opacity: 0; }
+  }    
 `
 
 function StyleInjector() {
@@ -917,6 +986,7 @@ function Toast({ message, type, key: k }) {
 
 /* ─── Voice Assistant component ──────────────────────────────── */
 function VoiceAssistant({ selectedFlowFile }) {
+  const [isMinimized, setIsMinimized] = useState(true)
   const [isRunning, setIsRunning] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [showTranscription, setShowTranscription] = useState(false)
@@ -928,7 +998,10 @@ function VoiceAssistant({ selectedFlowFile }) {
   const audioStreamRef = useRef(null)
   const dataChannelRef = useRef(null)
   const audioElRef = useRef(null)
-  const transcriptBoxRef = useRef(null)  
+  const transcriptBoxRef = useRef(null)
+  const isMutedRef = useRef(false)
+  const isRunningRef = useRef(false)
+
 
   const appendTranscript = useCallback((text) => {
     if (!text) return
@@ -945,7 +1018,6 @@ function VoiceAssistant({ selectedFlowFile }) {
     const channel = dataChannelRef.current
     if (channel?.readyState === 'open') {
       channel.send(JSON.stringify(message))
-      console.log('Sent message:', message)
     }
   }, [])
 
@@ -956,11 +1028,7 @@ function VoiceAssistant({ selectedFlowFile }) {
   const sendFunctionOutput = useCallback((callId, data) => {
     sendMessage({
       type: 'conversation.item.create',
-      item: {
-        type: 'function_call_output',
-        call_id: callId,
-        output: JSON.stringify(data),
-      },
+      item: { type: 'function_call_output', call_id: callId, output: JSON.stringify(data) },
     })
   }, [sendMessage])
 
@@ -968,23 +1036,12 @@ function VoiceAssistant({ selectedFlowFile }) {
     sendMessage({
       type: 'session.update',
       session: {
-        input_audio_transcription: {
-          model: 'whisper-1',
-        },
-        tools: [
-          {
-            type: 'function',
-            name: 'get_weather',
-            description: 'Get the current weather. Works only for Earth',
-            parameters: {
-              type: 'object',
-              properties: {
-                location: { type: 'string' },
-              },
-              required: ['location'],
-            },
-          },
-        ],
+        input_audio_transcription: { model: 'whisper-1' },
+        tools: [{
+          type: 'function', name: 'get_weather',
+          description: 'Get the current weather. Works only for Earth',
+          parameters: { type: 'object', properties: { location: { type: 'string' } }, required: ['location'] },
+        }],
         tool_choice: 'auto',
       },
     })
@@ -996,97 +1053,57 @@ function VoiceAssistant({ selectedFlowFile }) {
       previous_item_id: null,
       item: {
         id: `msg_${Date.now()}`,
-        type: 'message',
-        role: 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: "You are a AI named Kaviya, you only speak english, always follow the workflow",
-          },
-        ],
+        type: 'message', role: 'user',
+        content: [{ type: 'input_text', text: "You are a AI named Kaviya, you only speak english, always follow the workflow" }],
       },
     })
   }, [sendMessage])
 
   const saveGPTResponseToBackEnd = useCallback((message) => {
-    const output =
-      message?.content?.[0]?.transcript ||
-      message?.content?.[0]?.text ||
-      ''
-
+    const output = message?.content?.[0]?.transcript || message?.content?.[0]?.text || ''
     if (!output) return
-
     fetch(`${VOICE_BACKEND_BASE}/save-transcription-gpt`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data: output }),
-    }).catch((error) => {
-      console.error('Error saving GPT transcription:', error.message)
-    })
+    }).catch(console.error)
   }, [])
 
   const handleWeatherFunction = useCallback(async (output) => {
     try {
       const args = JSON.parse(output.arguments)
-      const location = args.location
-
-      const response = await fetch(
-        `${VOICE_BACKEND_BASE}/weather/${encodeURIComponent(location)}`
-      )
+      const response = await fetch(`${VOICE_BACKEND_BASE}/weather/${encodeURIComponent(args.location)}`)
       const data = await response.json()
-
-      sendFunctionOutput(output.call_id, {
-        temperature: data.temperature,
-        unit: data.unit,
-        location,
-      })
-
+      sendFunctionOutput(output.call_id, { temperature: data.temperature, unit: data.unit, location: args.location })
       sendResponseCreate()
-    } catch (error) {
-      console.error('Weather function error:', error)
-    }
+    } catch (error) { console.error('Weather function error:', error) }
   }, [sendFunctionOutput, sendResponseCreate])
 
   const handleFunctionCall = useCallback((output) => {
-    if (output?.type === 'function_call') {
-      if (output?.name === 'get_weather' && output?.call_id) {
-        console.log('Weather function call found:', output)
-        handleWeatherFunction(output)
-      }
+    if (output?.type === 'function_call' && output?.name === 'get_weather' && output?.call_id) {
+      handleWeatherFunction(output)
     }
   }, [handleWeatherFunction])
 
   const handleAudioTranscriptionComplete = useCallback((message) => {
-    try {
-      const text = message?.transcript
-      if (!text) return
-
-      appendTranscript(text)
-
-      fetch(`${VOICE_BACKEND_BASE}/save-transcription`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ transcription: text }),
-      }).catch((error) => {
-        console.error('Error saving transcription:', error.message)
-      })
-    } catch (error) {
-      console.error('Error handling audio transcription:', error.message)
-    }
+    const text = message?.transcript
+    if (!text) return
+    appendTranscript(text)
+    fetch(`${VOICE_BACKEND_BASE}/save-transcription`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ transcription: text }),
+    }).catch(console.error)
   }, [appendTranscript])
 
   const handleTranscript = useCallback((message) => {
     const text = message?.response?.output?.[0]?.content?.[0]?.transcript
-    if (text) {
-      appendTranscript(text)
-    }
+    if (text) appendTranscript(text)
   }, [appendTranscript])
 
   const handleMessage = useCallback((event) => {
     try {
       const message = JSON.parse(event.data)
-      console.log('Received message:', message)
-
       switch (message.type) {
         case 'response.done': {
           handleTranscript(message)
@@ -1095,32 +1112,18 @@ function VoiceAssistant({ selectedFlowFile }) {
           if (output) handleFunctionCall(output)
           break
         }
-
         case 'conversation.item.input_audio_transcription.completed':
           handleAudioTranscriptionComplete(message)
           break
-
-        default:
-          console.log('Unhandled message type:', message.type)
+        default: break
       }
-    } catch (error) {
-      console.error('Error processing message:', error.message)
-    }
-  }, [
-    handleTranscript,
-    handleFunctionCall,
-    handleAudioTranscriptionComplete,
-    saveGPTResponseToBackEnd,
-  ])
+    } catch (error) { console.error('Error processing message:', error.message) }
+  }, [handleTranscript, handleFunctionCall, handleAudioTranscriptionComplete, saveGPTResponseToBackEnd])
 
   const setupAudio = useCallback(async (pc) => {
     const audioEl = audioElRef.current
     if (audioEl) audioEl.autoplay = true
-
-    pc.ontrack = (e) => {
-      if (audioEl) audioEl.srcObject = e.streams[0]
-    }
-
+    pc.ontrack = (e) => { if (audioEl) audioEl.srcObject = e.streams[0] }
     const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true })
     audioStreamRef.current = audioStream
     audioStream.getTracks().forEach((track) => pc.addTrack(track, audioStream))
@@ -1141,91 +1144,54 @@ function VoiceAssistant({ selectedFlowFile }) {
 
   const cleanupConnection = useCallback(() => {
     try {
-      if (dataChannelRef.current) {
-        dataChannelRef.current.close()
-        dataChannelRef.current = null
-      }
-
-      if (peerConnectionRef.current) {
-        peerConnectionRef.current.close()
-        peerConnectionRef.current = null
-      }
-
-      if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach((track) => track.stop())
-        audioStreamRef.current = null
-      }
-
-      if (audioElRef.current) {
-        audioElRef.current.srcObject = null
-      }
-    } catch (error) {
-      console.error('Cleanup error:', error)
-    }
+      if (dataChannelRef.current) { dataChannelRef.current.close(); dataChannelRef.current = null }
+      if (peerConnectionRef.current) { peerConnectionRef.current.close(); peerConnectionRef.current = null }
+      if (audioStreamRef.current) { audioStreamRef.current.getTracks().forEach((t) => t.stop()); audioStreamRef.current = null }
+      if (audioElRef.current) audioElRef.current.srcObject = null
+    } catch (error) { console.error('Cleanup error:', error) }
   }, [])
 
-  const toggleMute = useCallback(() => {
+  const toggleMute = () => {
+    console.log('toggleMute called', {
+      isRunningRef: isRunningRef.current,
+      audioStream: audioStreamRef.current,
+      tracks: audioStreamRef.current?.getTracks(),
+      isMutedRef: isMutedRef.current,
+    })
+    if (!isRunningRef.current) return
     const stream = audioStreamRef.current
     if (!stream?.getTracks?.()?.length) return
-
     const track = stream.getTracks()[0]
     if (!track) return
 
-    const nextMuted = !isMuted
-    track.enabled = isMuted
+    const nextMuted = !isMutedRef.current
+    isMutedRef.current = nextMuted
+    track.enabled = !nextMuted
     setIsMuted(nextMuted)
-
-    if (nextMuted) {
-      setStatus('Muted')
-    } else {
-      setStatus('Connected')
-    }
-  }, [isMuted])
+    setStatus(nextMuted ? 'Muted' : 'Connected')
+  }
 
   const init = useCallback(async () => {
     if (connecting || isRunning) return
-
     setConnecting(true)
     setStatus('Connecting…')
-
     try {
-      console.log("flowName", selectedFlowFile)
-      const tokenResponse = await fetch(
-        `${VOICE_SESSION_URL}?workflowName=${selectedFlowFile}`
-      )
-
+      const tokenResponse = await fetch(`${VOICE_SESSION_URL}?workflowName=${selectedFlowFile}`)
       const data = await tokenResponse.json()
       const ephemeralKey = data.client_secret.value
-
       const pc = new RTCPeerConnection()
       peerConnectionRef.current = pc
-
       await setupAudio(pc)
       setupDataChannel(pc)
-
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
-
       const sdpResponse = await fetch(
         `https://api.openai.com/v1/realtime?model=${OPENAI_REALTIME_MODEL}`,
-        {
-          method: 'POST',
-          body: offer.sdp,
-          headers: {
-            Authorization: `Bearer ${ephemeralKey}`,
-            'Content-Type': 'application/sdp',
-          },
-        }
+        { method: 'POST', body: offer.sdp, headers: { Authorization: `Bearer ${ephemeralKey}`, 'Content-Type': 'application/sdp' } }
       )
-
-      const answer = {
-        type: 'answer',
-        sdp: await sdpResponse.text(),
-      }
-
-      await pc.setRemoteDescription(answer)
-
+      await pc.setRemoteDescription({ type: 'answer', sdp: await sdpResponse.text() })
       setIsRunning(true)
+      isRunningRef.current = true
       setStatus('Listening')
     } catch (error) {
       console.error('Initialization error:', error)
@@ -1234,45 +1200,74 @@ function VoiceAssistant({ selectedFlowFile }) {
     } finally {
       setConnecting(false)
     }
-  }, [cleanupConnection, connecting, isRunning, setupAudio, setupDataChannel])
+  }, [cleanupConnection, connecting, isRunning, setupAudio, setupDataChannel, selectedFlowFile])
 
   const triggerMail = useCallback(async () => {
-    try {
-      await fetch(`${VOICE_BACKEND_BASE}/sendMailAfterCall`)
-    } catch (error) {
-      console.error('Error triggering mail:', error)
-    }
+    try { await fetch(`${VOICE_BACKEND_BASE}/sendMailAfterCall`) }
+    catch (error) { console.error('Error triggering mail:', error) }
   }, [])
 
   const stopRecording = useCallback(async () => {
     await triggerMail()
     cleanupConnection()
     setIsRunning(false)
+    isRunningRef.current = false
     setIsMuted(false)
+    isMutedRef.current = false  
     setStatus('Ready to start')
   }, [cleanupConnection, triggerMail])
 
-  useEffect(() => {
-    return () => {
-      cleanupConnection()
-    }
-  }, [cleanupConnection])
+  useEffect(() => { return () => { cleanupConnection() } }, [cleanupConnection])
 
+  // ── Minimized bubble ──
+  if (isMinimized) {
+    return (
+      <div
+        className="voice-shell-minimized"
+        onClick={() => setIsMinimized(false)}
+        title="Open voice assistant"
+      >
+        {isRunning && !isMuted && (
+          <>
+            <div className="wave-mini" />
+            <div className="wave-mini" />
+          </>
+        )}
+        <img src="/assets/logo.png" alt="Voice assistant" className="mini-avatar" />
+      </div>
+    )
+  }
+
+  // ── Expanded panel ──
   return (
-    <div className="voice-shell">
+    <div className="voice-shell-expanded">
       <div className="voice-title">
         <div>
           <h2>Test Workflow</h2>
           <div className="voice-status">{status}</div>
         </div>
-        <button
-          className="voice-btn"
-          onClick={() => setShowTranscription((s) => !s)}
-          title="Show transcription"
-          type="button"
-        >
-          <IconMessage />
-        </button>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <button
+            className="voice-btn"
+            onClick={() => setShowTranscription((s) => !s)}
+            title="Show transcription"
+            type="button"
+          >
+            <IconMessage />
+          </button>
+          {/* Minimize button */}
+          <button
+            className="voice-btn"
+            onClick={() => setIsMinimized(true)}
+            title="Minimize"
+            type="button"
+            style={{ fontSize: 18, fontWeight: 300, lineHeight: 1 }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div className="voice-avatar-wrap">
@@ -1283,42 +1278,30 @@ function VoiceAssistant({ selectedFlowFile }) {
             <div className="wave" />
           </>
         )}
-
-        <img
-          src="/assets/logo.png"
-          alt="Voice assistant"
-          className="voice-avatar"
-        />
+        <img src="/assets/logo.png" alt="Voice assistant" className="voice-avatar" />
       </div>
 
       <div className="voice-controls">
         {!isRunning ? (
-          <button
-            className="voice-btn active"
-            title="Start"
-            onClick={init}
-            disabled={connecting}
-            type="button"
-          >
+          <button className="voice-btn active" title="Start" onClick={init} disabled={connecting} type="button">
             {connecting ? <IconSpinner /> : <IconPlay />}
           </button>
         ) : (
-          <button
-            className="voice-btn danger"
-            title="Pause"
-            onClick={stopRecording}
-            type="button"
-          >
+          <button className="voice-btn danger" title="Stop" onClick={stopRecording} type="button">
             <IconPause />
           </button>
         )}
 
+        {/* Mute — always enabled when running, clearly disabled when not */}
         <button
           className={`voice-btn ${isMuted ? 'active' : ''}`}
           title={isMuted ? 'Unmute' : 'Mute'}
           onClick={toggleMute}
-          disabled={!isRunning}
           type="button"
+          style={{
+            opacity: isRunning ? 1 : 0.35,
+            cursor: isRunning ? 'pointer' : 'not-allowed',
+          }}
         >
           {isMuted ? <IconMicOff /> : <IconMic />}
         </button>
@@ -1334,25 +1317,21 @@ function VoiceAssistant({ selectedFlowFile }) {
       </div>
 
       <div className="voice-subline">
-        {isRunning ? '⌘↵ available in chat bar' : 'click to start'}
+        {isRunning ? '⌘↵ available in chat bar' : 'click ▶ to start'}
       </div>
 
       <audio ref={audioElRef} autoPlay className="hidden" />
 
       {showTranscription && (
         <div className="transcription-drawer">
-          <button
-            className="transcription-close"
-            onClick={() => setShowTranscription(false)}
-            type="button"
-          >
+          <button className="transcription-close" onClick={() => setShowTranscription(false)} type="button">
             <IconClose />
           </button>
           <p ref={transcriptBoxRef} className="transcript-text">
             {transcript || 'No transcription yet.'}
           </p>
         </div>
-      )}
+      )}  
     </div>
   )
 }
@@ -1703,7 +1682,7 @@ export default function App() {
               <div className="logo-mark">⬡</div>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.01em', color: 'var(--text-primary)' }}>
-                  QuantAI.in
+                  Workflow AI
                 </div>
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.06em' }}>
                   WORKFLOW BUILDER

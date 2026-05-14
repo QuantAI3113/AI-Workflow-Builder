@@ -1,0 +1,279 @@
+{
+  "name": "travel-flow",
+  "generatedAt": "2026-05-14T04:27:28.524456",
+  "sourcePrompt": "Start the conversation politely and introduce yourself as a customer looking for travel information.\nMention the source and destination locations clearly.\nSpecify the tentative travel dates or preferred travel month.\nAsk about available travel packages or itinerary options.\nEnquire whether flights, hotels, meals, and local transport are included.\nAsk for hotel category details such as budget, 3-star, 4-star, or luxury options.\nRequest complete pricing information including taxes and hidden charges.\nAsk about visa requirements, passport validity, and travel documents needed.\nEnquire about cancellation policy, refund process, and available discounts or offers.\nAsk for the booking procedure, payment methods, and contact details for further communication.\n\nUse the above instructions to create the workflow.",
+  "nodes": [
+    {
+      "id": "1",
+      "type": "workflow",
+      "position": {
+        "x": 100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "greeting",
+        "instructions": "Say Hi and ask that you are looking for travel itinerary.",
+        "responseFields": [
+          {
+            "key": "message",
+            "value": "Initial greeting message"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "2",
+      "type": "workflow",
+      "position": {
+        "x": 600,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "mention_destination",
+        "instructions": "AI customer states the destination they are interested in visiting.",
+        "responseFields": [
+          {
+            "key": "destination",
+            "value": "Target travel destination"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "3",
+      "type": "workflow",
+      "position": {
+        "x": 1100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "ask_about_packages",
+        "instructions": "AI customer inquires about available travel packages.",
+        "responseFields": [
+          {
+            "key": "packages",
+            "value": "Available holiday packages"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "4",
+      "type": "workflow",
+      "position": {
+        "x": 1600,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_about_dates",
+        "instructions": "AI customer requests information on travel dates.",
+        "responseFields": [
+          {
+            "key": "travel_dates",
+            "value": "Proposed travel dates"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "5",
+      "type": "workflow",
+      "position": {
+        "x": 2100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "enquire_flight_details",
+        "instructions": "AI customer asks for flight options and details.",
+        "responseFields": [
+          {
+            "key": "flights",
+            "value": "Flight details and options"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "6",
+      "type": "workflow",
+      "position": {
+        "x": 2600,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_about_hotels",
+        "instructions": "AI customer inquires about hotel accommodations.",
+        "responseFields": [
+          {
+            "key": "hotels",
+            "value": "Hotel options and upgrades"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "7",
+      "type": "workflow",
+      "position": {
+        "x": 3100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "ask_about_pricing",
+        "instructions": "AI customer inquires about the total cost and inclusions.",
+        "responseFields": [
+          {
+            "key": "cost",
+            "value": "Approximate cost per person"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "8",
+      "type": "workflow",
+      "position": {
+        "x": 3600,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_about_documents",
+        "instructions": "AI customer asks for details on required travel documents.",
+        "responseFields": [
+          {
+            "key": "visa_info",
+            "value": "Visa and document requirements"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "9",
+      "type": "workflow",
+      "position": {
+        "x": 4100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "ask_about_offers",
+        "instructions": "AI customer negotiates or checks for available offers and discounts.",
+        "responseFields": [
+          {
+            "key": "discounts",
+            "value": "Available discounts"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "10",
+      "type": "workflow",
+      "position": {
+        "x": 4600,
+        "y": -180
+      },
+      "data": {
+        "fieldNode": "ask_for_next_steps",
+        "instructions": "AI customer requests information on the booking procedure.",
+        "responseFields": [
+          {
+            "key": "next_steps",
+            "value": "Procedure to confirm booking"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    },
+    {
+      "id": "11",
+      "type": "workflow",
+      "position": {
+        "x": 5100,
+        "y": 250
+      },
+      "data": {
+        "fieldNode": "ask_about_cancellation_policy",
+        "instructions": "AI customer requests information on cancellation policy and refund process.",
+        "responseFields": [
+          {
+            "key": "cancellation_policy",
+            "value": "Details on cancellation policy and refunds"
+          }
+        ]
+      },
+      "width": 340,
+      "height": 309
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1-2",
+      "source": "1",
+      "target": "2"
+    },
+    {
+      "id": "e2-3",
+      "source": "2",
+      "target": "3"
+    },
+    {
+      "id": "e3-4",
+      "source": "3",
+      "target": "4"
+    },
+    {
+      "id": "e4-5",
+      "source": "4",
+      "target": "5"
+    },
+    {
+      "id": "e5-6",
+      "source": "5",
+      "target": "6"
+    },
+    {
+      "id": "e6-7",
+      "source": "6",
+      "target": "7"
+    },
+    {
+      "id": "e7-8",
+      "source": "7",
+      "target": "8"
+    },
+    {
+      "id": "e8-9",
+      "source": "8",
+      "target": "9"
+    },
+    {
+      "id": "e9-10",
+      "source": "9",
+      "target": "10"
+    },
+    {
+      "id": "e10-11",
+      "source": "10",
+      "target": "11"
+    }
+  ]
+}
