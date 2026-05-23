@@ -1,4 +1,3 @@
-```md
 # AI Workflow Builder
 
 AI Workflow Builder is a visual AI orchestration platform that helps users create, generate, test, and optimize complex workflows using a node-based interface.
@@ -197,4 +196,3 @@ AI Workflow Builder simplifies the creation and management of large-scale AI wor
 - Future autonomous AI validation and optimization
 
 The platform aims to become a next-generation autonomous workflow engineering system for AI-driven applications.
-```
